@@ -1,8 +1,11 @@
+require ('byebug')
+
 module User_module 
 	def self.create_user(user)
 		file = File.open('user.txt','a')
 		#Storing name email password in user.txt file
 		file.puts("#{user.name} #{user.email} #{user.password}")
+    file.close
 	end
 
 	def self.login_user(email, password)
@@ -19,15 +22,24 @@ module User_module
     #checking that email is registered or not
     if user_hash.has_key?(email)
       real_pass = user_hash[email]
-    	if real_pass.eql?(password)
-    	  puts 'Login Succesfully'
-    	else
-    	 	puts 'Password is wrong'
-    	end
+      count = 0
+      loop do 
+        #three times user can enter password otherwise program exited
+    	  if real_pass.eql?(password)
+    	    puts 'Login Succesfully'
+          return email
+    	  else
+    	 	  puts 'Password is wrong'
+          puts 'Re-enter Password'
+          temp_pass = gets.chomp
+          password = temp_pass
+          count += 1
+    	  end
+        break if count >= 3
+      end
     else 
     	puts 'email not registered'
     end
 	end
-
 
 end
