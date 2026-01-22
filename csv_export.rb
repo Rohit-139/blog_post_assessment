@@ -1,6 +1,5 @@
 require "csv"
 require './blog.rb'
-require 'byebug'
 
 class Csv < Blog
 
@@ -19,9 +18,11 @@ class Csv < Blog
 	end
 
 	def export_to_csv(email)
+		headers = ["blog_id", "blog_title", "blog_content", "created_by"]
 		data = export_data(email)
 
 		CSV.open("my_blogs.csv", 'w') do |csv|
+			csv << headers
 			data.each do |row|
 				csv << row
 			end

@@ -1,4 +1,3 @@
-require ('byebug')
 
 module User_module 
 	def self.create_user(user)
@@ -26,10 +25,10 @@ module User_module
       loop do 
         #three times user can enter password otherwise program exited
     	  if real_pass.eql?(password)
-    	    puts 'Login Succesfully'
+    	    puts "Login Succesfully\n"
           return email
     	  else
-    	 	  puts 'Password is wrong'
+    	 	  puts "Password is wrong"
           puts 'Re-enter Password'
           temp_pass = gets.chomp
           password = temp_pass
@@ -38,7 +37,7 @@ module User_module
         break if count >= 3
       end
     else 
-    	puts 'email not registered'
+    	puts "email not registered \n"
     end
 	end
 

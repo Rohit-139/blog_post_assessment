@@ -14,11 +14,13 @@ class Main
 		puts 'Enter Password : '
 		password = gets.chomp.split.first
 		user = User.new(name,email, password)
-		if user.validate_user?(email, password)
+		if user.validate_user?(name,email, password)
 		  User_module.create_user(user)
-		  puts 'User Registered Succesfully'
+		  puts "User Registered Succesfully \n"
+		  return true
 		else
-			puts 'try again'
+			puts "try again \n"
+			return false
 		end
 	end
   
@@ -32,7 +34,7 @@ class Main
   
   def blog_method_choice(email)
   	loop do
-	  	puts "press 1 for Create blog \npress 2 for view your blog \npress 3 for see all blog \npress 4 for search blog \npress 5 for export to csv \npress 6 for quit"
+	  	puts "press 1 for Create blog \npress 2 for view your blog \npress 3 for see all blog \npress 4 for search blog \npress 5 for export to csv \npress 6 for logout \npress 7 for exit"
 	  	blog_object = Blog.new
 	  	choice = gets.chomp.to_i
 	  	case choice 
@@ -41,9 +43,13 @@ class Main
 	  	  blog_title = gets.chomp
 	  	  puts "Enter blog description : "
 	  	  blog_desc = gets.chomp
+	  	  if blog_title.bytes.size > 20
+	  	  	puts "blog does not create, blog title should be within 20 character\n"
+	  	  else
 	  	  blog_object.create_blog(blog_title,blog_desc,email)	
 	  	  blog_object.store_blog(blog_object)
-	  	  puts "Blog is created"
+	  	  puts "Blog is created \n"
+	  	  end
 	  	when 2
 	  		blog_object.my_blog(email)
 	  	when 3
@@ -55,11 +61,15 @@ class Main
 	  	when 5
 	  		csv_object = Csv.new
 	  		csv_object.export_to_csv(email)
-	  		puts "data exported to csv, check my_blogs.csv"
+	  		puts "data exported to csv, check my_blogs.csv\n"
 	  	when 6 
+	  		puts 'Logged out...'
+	  		main_method
+	  	when 7 
 	  		puts "exiting program...."
 	  		exit
 	  	end
+
   	  break if choice == 6
     end
   end
@@ -68,21 +78,32 @@ class Main
   	case user_choice
   	when 1
   		#calling create user method when user input is 1
-  		create_user
-  		puts "Redirecting to login "
-  		email = login_user
+  		if create_user
+  		  puts "Redirecting to login \n"
+  		  email = login_user
+  		  if email == nil
+  		   	main_method
+  	    else
+  	      blog_method_choice(email)
+ 		    end
+  		else main_method
+  		end
   		
   	when 2
   		#calling login_user method when user input is 2
   		email = login_user
-  		blog_method_choice(email)
-  		
+  		if email == nil
+  		  puts "try again\n"
+  		  main_method
+  		else
+  		  blog_method_choice(email)
+  		end
   	when 3
   		#exit from program
   		puts "Exited from program" 
   		exit
   	else 
-  		puts "Enter valid choice "
+  		puts "Enter valid choice \n"
   	end
   end
 
